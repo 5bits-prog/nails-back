@@ -1,36 +1,42 @@
 package jsges.nails.domain.articulos;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
+@Table(name = "articulo_venta")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
 public class ArticuloVenta {
-
-
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @Column(name = "id")
         private Integer id;
 
-        @Column(columnDefinition = "TEXT")
-        String denominacion;
-        int estado;
+        @Column(columnDefinition = "TEXT", name = "denominacion")
+        private String denominacion;
 
-        @Column(columnDefinition = "TEXT")
-        String observacion;
+        @Column(columnDefinition = "TEXT", name = "estado")
+        private int estado;
 
-        @ManyToOne(cascade = CascadeType.ALL)
+        @Column(columnDefinition = "TEXT", name = "observacion")
+        private String observacion;
+
+        @ManyToOne()
+        @JoinColumn(name = "linea_id")
+        @Column(name = "linea_id")
         private Linea linea;
 
 
-        public void asEliminado() {
+        public void eliminar () {
                this.setEstado(1);
+        }
+
+        public void recuperar () {
+               this.setEstado(0);
+        }
+
+        public boolean esEliminado () {
+               return this.getEstado() == 1;
         }
 }
 
