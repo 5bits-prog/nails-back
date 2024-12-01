@@ -1,12 +1,8 @@
 package jsges.nails.controller.articulos;
 
 import jsges.nails.DTO.articulos.ArticuloVentaDTO;
-import jsges.nails.domain.articulos.ArticuloVenta;
-import jsges.nails.excepcion.RecursoNoEncontradoExcepcion;
 import jsges.nails.service.articulos.IArticuloVentaService;
 import jsges.nails.service.articulos.ILineaService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -64,8 +60,7 @@ public class ArticuloVentaController {
     @PutMapping("/articulos/{id}")
     public ResponseEntity<ArticuloVentaDTO> actualizar(@PathVariable Integer id,
                                                     @RequestBody ArticuloVentaDTO modelRecibido){
-        ArticuloVentaDTO model = modelService.actualizar(id,modelRecibido);
-        return ResponseEntity.ok(model);
+        return ResponseEntity.ok(modelService.actualizar(id,modelRecibido));
     }
 
 }

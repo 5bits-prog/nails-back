@@ -2,6 +2,7 @@ package jsges.nails.service.articulos;
 
 import jsges.nails.DTO.articulos.LineaDTO;
 import jsges.nails.domain.articulos.Linea;
+import jsges.nails.excepcion.RecursoNoEncontradoExcepcion;
 import jsges.nails.repository.articulos.LineaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +19,14 @@ import java.util.List;
 @Service
 public class LineaService implements ILineaService {
 
-    @Autowired
-    private LineaRepository modelRepository;
+    private final LineaRepository modelRepository;
+
+    public LineaService (LineaRepository modelRepository) {
+        this.modelRepository = modelRepository;
+    }
+
+
+
     private static final Logger logger = LoggerFactory.getLogger(LineaService.class);
 
     @Override
@@ -29,7 +36,11 @@ public class LineaService implements ILineaService {
 
     @Override
     public Linea buscarPorId(Integer id) {
-        return modelRepository.findById(id).orElse(null);
+        Linea model = modelRepository.findById(id).orElse(null);
+        if (model == null) {
+            throw new RecursoNoEncontradoExcepcion("El id recibido no existe: " + id);
+        }
+        return model;
     }
 
 
@@ -42,7 +53,9 @@ public class LineaService implements ILineaService {
 
     @Override
     public Linea newModel(LineaDTO modelDTO) {
-        Linea model =  new Linea(modelDTO);
+        Linea model =  new Linea();
+        model.setDenominacion(modelDTO.denominacion);
+        model.setObservacion(modelDTO.getObservacion());
         return guardar(model);
     }
 

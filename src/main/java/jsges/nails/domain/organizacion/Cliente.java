@@ -17,7 +17,7 @@ public class Cliente {
         private String razonSocial;
 
         @Column(name = "estado")
-        private int estado;
+        private Integer estado;
 
         @Column(columnDefinition = "TEXT", name = "letra")
         private String letra;

@@ -1,10 +1,9 @@
-# Conexión a MySQL
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/js_nails_db?createDatabaseIfNotExist=true
-    username: admin
-    password: admin
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://localhost:5432/nails_back
+    username: postgres
+    password: 43928343
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
@@ -15,10 +14,12 @@ spring:
     cors:
       mappings:
         "/nails/**":
-          allowed-origins: "http://localhost:5173"
+          allowed-origins: "*"
           allowed-methods: "*"
           allowed-headers: "*"
 
 # Configuración personalizada
-path_mapping: nails
-page_max: 9
+path_mapping: "/nails_back"
+path_cross: "*"
+max_page: 9
+

@@ -14,7 +14,7 @@ public class ItemServicio {
     private Integer id;
 
     @Column(name = "estado")
-    private int estado;
+    private Integer estado;
 
     @Column(columnDefinition = "TEXT", name = "observacion")
     private String observacion;

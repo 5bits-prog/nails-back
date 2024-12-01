@@ -17,7 +17,7 @@ public class TipoServicio {
     private String denominacion;
 
     @Column(name = "estado")
-    private int estado;
+    private Integer estado;
 
     @Column(columnDefinition = "TEXT", name = "observacion")
     private String observacion;

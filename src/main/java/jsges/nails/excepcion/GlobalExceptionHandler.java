@@ -23,8 +23,8 @@ public class GlobalExceptionHandler {
     }
 
     // Manejo de NotFoundException (404)
-    @ExceptionHandler(ChangeSetPersister.NotFoundException.class)
-    public ResponseEntity<Object> handleNotFound(ChangeSetPersister.NotFoundException ex) {
+    @ExceptionHandler(RecursoNoEncontradoExcepcion.class)
+    public ResponseEntity<Object> handleNotFound(RecursoNoEncontradoExcepcion ex) {
         ApiResponse<Object> response = new ApiResponse<>(
                 404,
                 "Error: Not Found",
@@ -84,7 +84,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleGlobalException(Exception ex) {
         ApiResponse<Object> response = new ApiResponse<>(
                 500,
-                "Error: Internal Server Error",
+                ex.getMessage(),
                 null,
                 "Ocurrió un error inesperado."
         );

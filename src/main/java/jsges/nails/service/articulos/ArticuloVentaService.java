@@ -20,15 +20,20 @@ import java.util.List;
 @Service
 public class ArticuloVentaService implements IArticuloVentaService{
     private final ArticuloVentaRepository modelRepository;
+    private final LineaService lineaService;
 
     @Autowired
-    public ArticuloVentaService(ArticuloVentaRepository modelRepository) {
+    public ArticuloVentaService(ArticuloVentaRepository modelRepository, LineaService lineaService) {
         this.modelRepository = modelRepository;
+        this.lineaService = lineaService;
     }
 
     @Override
     public List<ArticuloVentaDTO> listar() {
-        List<ArticuloVenta> list = modelRepository.buscarNoEliminados();
+        List<ArticuloVenta> list = modelRepository.findByEstado(0);
+        if (list.isEmpty()) {
+            throw new RecursoNoEncontradoExcepcion("No se encontraron artículos de venta.");
+        }
         List<ArticuloVentaDTO> listadoDTO    =  new ArrayList<>();
         list.forEach((model) -> {
             listadoDTO.add(new ArticuloVentaDTO(model));
@@ -61,12 +66,13 @@ public class ArticuloVentaService implements IArticuloVentaService{
 
     @Override
     public ArticuloVentaDTO guardar(ArticuloVentaDTO modelDTO) {
-        Integer idLinea = modelDTO.linea;
         ArticuloVenta newModel =  new ArticuloVenta();
+
         newModel.setDenominacion(modelDTO.denominacion);
         newModel.setObservacion(modelDTO.observacion);
-        LineaService lineaService = new LineaService();
-        newModel.setLinea(lineaService.buscarPorId(idLinea));
+
+        newModel.setLinea(lineaService.buscarPorId(modelDTO.linea));
+
         modelRepository.save(newModel);
         ArticuloVentaDTO modelDTO2 = new ArticuloVentaDTO(newModel);
         return modelDTO2;
@@ -128,7 +134,6 @@ public class ArticuloVentaService implements IArticuloVentaService{
             throw new BadRequestException("El id recibido ya se encuentra eliminado: " + id);
         }
         if (modelDTO.linea != null && modelDTO.linea != model.getLinea().getId()) {
-            LineaService lineaService = new LineaService();
             model.setLinea(lineaService.buscarPorId(modelDTO.linea));
             cambios = true;
         }

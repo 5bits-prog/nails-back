@@ -6,6 +6,7 @@ import jsges.nails.domain.servicios.ItemServicio;
 import jsges.nails.domain.servicios.Servicio;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,7 +15,7 @@ public class ServicioDTO{
 
     public Integer id;
     public Integer cliente;
-    public Timestamp fechaDocumento;
+    public LocalDateTime fechaDocumento;
     public Set<ItemServicioDTO> listaItems = new HashSet<>();
     public Double total;
     public String clienteRazonSocial;

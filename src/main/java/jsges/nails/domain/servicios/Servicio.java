@@ -16,7 +16,7 @@ public class Servicio {
         private Integer id;
 
         @Column(name = "estado")
-        private int estado;
+        private Integer estado;
 
         @ManyToOne()
         @JoinColumn(name = "cliente_id")
