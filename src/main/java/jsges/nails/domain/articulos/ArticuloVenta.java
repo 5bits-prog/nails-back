@@ -23,7 +23,6 @@ public class ArticuloVenta {
 
         @ManyToOne()
         @JoinColumn(name = "linea_id")
-        @Column(name = "linea_id")
         private Linea linea;
 
 

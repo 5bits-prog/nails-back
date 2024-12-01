@@ -19,12 +19,14 @@ import java.util.List;
 @RequestMapping(value="${path_mapping}")
 @CrossOrigin(value="${path_cross}")
 public class ArticuloVentaController {
-    private static final Logger logger = LoggerFactory.getLogger(ArticuloVentaController.class);
-    @Autowired
-    private IArticuloVentaService  modelService;
+    private final IArticuloVentaService modelService;
+    private final ILineaService lineaService;
 
     @Autowired
-    private ILineaService lineaService;
+    public ArticuloVentaController(IArticuloVentaService modelService, ILineaService lineaService) {
+        this.modelService = modelService;
+        this.lineaService = lineaService;
+    }
 
     @GetMapping({"/articulos"})
     public List<ArticuloVentaDTO> getAll() {
@@ -60,18 +62,9 @@ public class ArticuloVentaController {
     }
 
     @PutMapping("/articulos/{id}")
-    public ResponseEntity<ArticuloVenta> actualizar(@PathVariable Integer id,
+    public ResponseEntity<ArticuloVentaDTO> actualizar(@PathVariable Integer id,
                                                     @RequestBody ArticuloVentaDTO modelRecibido){
-        logger.info("articulo " +modelRecibido);
-        ArticuloVenta model = modelService.buscarPorId(id);
-        logger.info("articulo " +model);
-        if (model == null){
-            throw new RecursoNoEncontradoExcepcion("El id recibido no existe: " + id);
-        }
-        logger.info("articulo " +model);
-        model.setDenominacion(modelRecibido.denominacion);
-        model.setLinea(lineaService.buscarPorId(modelRecibido.linea));
-        modelService.guardar(model);
+        ArticuloVentaDTO model = modelService.actualizar(id,modelRecibido);
         return ResponseEntity.ok(model);
     }
 

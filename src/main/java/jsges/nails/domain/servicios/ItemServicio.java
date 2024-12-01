@@ -21,12 +21,10 @@ public class ItemServicio {
 
     @ManyToOne()
     @JoinColumn (name = "tipo_servicio_id")
-    @Column (name = "tipo_servicio_id")
     private TipoServicio tipoServicio;
 
     @ManyToOne()
     @JoinColumn (name = "servicio_id")
-    @Column (name = "servicio_id")
     private Servicio servicio;
 
     @Column(name = "precio")

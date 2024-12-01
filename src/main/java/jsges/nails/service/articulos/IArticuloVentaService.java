@@ -19,7 +19,7 @@ public interface IArticuloVentaService {
 
     public ArticuloVentaDTO eliminar(Integer id);
 
-
+    public ArticuloVentaDTO actualizar(Integer id,ArticuloVentaDTO modelDTO);
 
     public Page<ArticuloVenta> getArticulos(Pageable pageable);
 

@@ -5,8 +5,6 @@ import jsges.nails.domain.articulos.ArticuloVenta;
 import jsges.nails.excepcion.BadRequestException;
 import jsges.nails.excepcion.RecursoNoEncontradoExcepcion;
 import jsges.nails.repository.articulos.ArticuloVentaRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,10 +19,12 @@ import java.util.List;
 
 @Service
 public class ArticuloVentaService implements IArticuloVentaService{
-    @Autowired
-    private ArticuloVentaRepository modelRepository;
-    private static final Logger logger = LoggerFactory.getLogger(ArticuloVentaService.class);
+    private final ArticuloVentaRepository modelRepository;
 
+    @Autowired
+    public ArticuloVentaService(ArticuloVentaRepository modelRepository) {
+        this.modelRepository = modelRepository;
+    }
 
     @Override
     public List<ArticuloVentaDTO> listar() {
@@ -108,8 +108,7 @@ public class ArticuloVentaService implements IArticuloVentaService{
                 list = listado.subList(startItem, toIndex);
             }
 
-            Page<ArticuloVentaDTO> bookPage
-                    = new PageImpl<ArticuloVentaDTO>(list, PageRequest.of(currentPage, pageSize), listado.size());
+            Page<ArticuloVentaDTO> bookPage  = new PageImpl<ArticuloVentaDTO>(list, PageRequest.of(currentPage, pageSize), listado.size());
 
             return bookPage;
         } catch (Exception e) {
@@ -118,6 +117,34 @@ public class ArticuloVentaService implements IArticuloVentaService{
 
     }
 
-
-
+    @Override
+    public ArticuloVentaDTO actualizar(Integer id,ArticuloVentaDTO modelDTO){
+        Boolean cambios = false;
+        ArticuloVenta model = modelRepository.findById(id).orElse(null);
+        if (model == null) {
+            throw new RecursoNoEncontradoExcepcion("El id recibido no existe: " + id);
+        }
+        if (model.esEliminado()) {
+            throw new BadRequestException("El id recibido ya se encuentra eliminado: " + id);
+        }
+        if (modelDTO.linea != null && modelDTO.linea != model.getLinea().getId()) {
+            LineaService lineaService = new LineaService();
+            model.setLinea(lineaService.buscarPorId(modelDTO.linea));
+            cambios = true;
+        }
+        if (modelDTO.denominacion != null && modelDTO.denominacion != model.getDenominacion()) {
+            model.setDenominacion(modelDTO.denominacion);
+            cambios = true;
+        }
+        if (modelDTO.observacion != null && modelDTO.observacion != model.getObservacion()) {
+            model.setObservacion(modelDTO.observacion);
+            cambios = true;
+        }
+        if (cambios){
+            modelRepository.save(model);
+            return new ArticuloVentaDTO(model);
+        }else {
+            throw new BadRequestException("No se realizaron cambios");
+        }
+    }
 }

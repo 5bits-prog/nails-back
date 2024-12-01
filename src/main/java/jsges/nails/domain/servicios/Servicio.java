@@ -20,7 +20,6 @@ public class Servicio {
 
         @ManyToOne()
         @JoinColumn(name = "cliente_id")
-        @Column(name = "cliente_id")
         private Cliente cliente;
 
         @Column(name = "fecha_registro")
