@@ -1,115 +1,66 @@
 package jsges.nails.controller.articulos;
 
 import jsges.nails.DTO.articulos.ArticuloVentaDTO;
-import jsges.nails.DTO.articulos.LineaDTO;
-import jsges.nails.domain.articulos.ArticuloVenta;
-import jsges.nails.domain.articulos.Linea;
-import jsges.nails.excepcion.RecursoNoEncontradoExcepcion;
 import jsges.nails.service.articulos.IArticuloVentaService;
 import jsges.nails.service.articulos.ILineaService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Integer.parseInt;
 
 @RestController
 @RequestMapping(value="${path_mapping}")
 @CrossOrigin(value="${path_cross}")
 public class ArticuloVentaController {
-    private static final Logger logger = LoggerFactory.getLogger(ArticuloVentaController.class);
-    @Autowired
-    private IArticuloVentaService  modelService;
+    private final IArticuloVentaService modelService;
+    private final ILineaService lineaService;
 
     @Autowired
-    private ILineaService lineaService;
-
-    public ArticuloVentaController() {
-
+    public ArticuloVentaController(IArticuloVentaService modelService, ILineaService lineaService) {
+        this.modelService = modelService;
+        this.lineaService = lineaService;
     }
 
     @GetMapping({"/articulos"})
     public List<ArticuloVentaDTO> getAll() {
-        logger.info("enta en  traer todas los articulos");
-        List<ArticuloVenta> list = modelService.listar();
-        List<ArticuloVentaDTO> listadoDTO    =  new ArrayList<>();
-        list.forEach((model) -> {
-            listadoDTO.add(new ArticuloVentaDTO(model));
-        });
-        return listadoDTO;
+        /*
+        * Lleve la logica de pasar la lista de models a dtos al services
+        * */
+        return modelService.listar();
     }
 
     @GetMapping({"/articulosPageQuery"})
     public ResponseEntity<Page<ArticuloVentaDTO>> getItems(@RequestParam(defaultValue = "") String consulta, @RequestParam(defaultValue = "0") int page,
                                                         @RequestParam(defaultValue = "${max_page}") int size) {
-        List<ArticuloVenta> listado = modelService.listar(consulta);
-        List<ArticuloVentaDTO> listadoDTO    =  new ArrayList<>();
-        listado.forEach((model) -> {
-            listadoDTO.add(new ArticuloVentaDTO(model));
-        });
-        Page<ArticuloVentaDTO> bookPage = modelService.findPaginated(PageRequest.of(page, size),listadoDTO);
+        List<ArticuloVentaDTO> listado = modelService.listar(consulta);
+        Page<ArticuloVentaDTO> bookPage = modelService.findPaginated(PageRequest.of(page, size),listado);
         return ResponseEntity.ok().body(bookPage);
-    }
-
-
-    @PostMapping("/articulos")
-    public ArticuloVenta agregar(@RequestBody ArticuloVentaDTO model){
-        logger.info("entra" );
-
-        Integer idLinea = model.linea;
-
-        ArticuloVenta newModel =  new ArticuloVenta();
-        newModel.setDenominacion(model.denominacion);
-        newModel.setLinea(lineaService.buscarPorId(idLinea));
-
-        ArticuloVenta modelSave= modelService.guardar(newModel);
-        return modelSave;
-    }
-
-
-    @DeleteMapping("/articuloEliminar/{id}")
-    public ResponseEntity<ArticuloVenta> eliminar(@PathVariable Integer id){
-        ArticuloVenta model = modelService.buscarPorId(id);
-        if (model == null){
-            throw new RecursoNoEncontradoExcepcion("El id recibido no existe: " + id);
-        }
-
-        model.asEliminado();
-        modelService.guardar(model);
-        return ResponseEntity.ok(model);
     }
 
     @GetMapping("/articulos/{id}")
     public ResponseEntity<ArticuloVentaDTO> getPorId(@PathVariable Integer id){
-        ArticuloVenta articuloVenta = modelService.buscarPorId(id);
-        if(articuloVenta == null){
-            throw new RecursoNoEncontradoExcepcion("No se encontro el id: " + id);
-        }
-        ArticuloVentaDTO model = new ArticuloVentaDTO(articuloVenta);
-        return ResponseEntity.ok(model);
+        ArticuloVentaDTO modelDTO = new ArticuloVentaDTO(modelService.buscarPorId(id));
+        return ResponseEntity.ok(modelDTO);
+    }
+
+    @PostMapping("/articulos")
+    public ArticuloVentaDTO agregar(@RequestBody ArticuloVentaDTO model){
+        return modelService.guardar(model);
+    }
+
+
+    @DeleteMapping("/articuloEliminar/{id}")
+    public ResponseEntity<ArticuloVentaDTO> eliminar(@PathVariable Integer id){
+        return ResponseEntity.ok().body(modelService.eliminar(id));
     }
 
     @PutMapping("/articulos/{id}")
-    public ResponseEntity<ArticuloVenta> actualizar(@PathVariable Integer id,
+    public ResponseEntity<ArticuloVentaDTO> actualizar(@PathVariable Integer id,
                                                     @RequestBody ArticuloVentaDTO modelRecibido){
-        logger.info("articulo " +modelRecibido);
-        ArticuloVenta model = modelService.buscarPorId(id);
-        logger.info("articulo " +model);
-        if (model == null){
-            throw new RecursoNoEncontradoExcepcion("El id recibido no existe: " + id);
-        }
-        logger.info("articulo " +model);
-        model.setDenominacion(modelRecibido.denominacion);
-        model.setLinea(lineaService.buscarPorId(modelRecibido.linea));
-        modelService.guardar(model);
-        return ResponseEntity.ok(model);
+        return ResponseEntity.ok(modelService.actualizar(id,modelRecibido));
     }
 
 }

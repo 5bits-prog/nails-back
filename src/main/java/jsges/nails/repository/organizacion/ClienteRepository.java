@@ -16,8 +16,4 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
     @Query("SELECT p FROM Cliente p WHERE p.estado = 0 AND  p.razonSocial LIKE %:consulta% ORDER BY p.razonSocial")
     List<Cliente> buscarNoEliminados(@Param("consulta") String consulta);
 
-
-
-
-
 }

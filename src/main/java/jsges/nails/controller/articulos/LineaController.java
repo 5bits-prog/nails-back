@@ -18,7 +18,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value="${path_mapping}")
-@CrossOrigin(value="${path_cross}")
 public class LineaController {
     private static final Logger logger = LoggerFactory.getLogger(LineaController.class);
     @Autowired
@@ -71,7 +70,7 @@ public class LineaController {
             throw new RecursoNoEncontradoExcepcion("El id recibido no existe: " + id);
         }
 
-        model.asEliminado();
+        model.esEliminado();
         modelService.guardar(model);
         return ResponseEntity.ok(model);
     }

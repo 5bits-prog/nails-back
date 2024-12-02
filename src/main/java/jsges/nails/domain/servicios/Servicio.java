@@ -2,35 +2,49 @@ package jsges.nails.domain.servicios;
 
 import jakarta.persistence.*;
 import jsges.nails.domain.organizacion.Cliente;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.ToString;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "servicios")
 @Data
-@AllArgsConstructor
-@ToString
 public class Servicio {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @Column(name = "id")
         private Integer id;
 
-        private int estado;
+        @Column(name = "estado")
+        private Integer estado;
 
-        @ManyToOne(cascade = CascadeType.ALL)
+        @ManyToOne()
+        @JoinColumn(name = "cliente_id")
         private Cliente cliente;
 
-        private Timestamp fechaRegistro;
-        private Timestamp fechaRealizacion;
+        @Column(name = "fecha_registro")
+        private LocalDateTime fechaRegistro;
+
+        @Column(name = "fecha_realizacion")
+        private LocalDateTime fechaRealizacion;
+
+        @Column(name = "total")
         private double total;
 
+        @PrePersist
+        protected void onCreate() {
+                this.fechaRegistro = LocalDateTime.now();
+        }
 
-    public Servicio() {
+        public void eliminar () {
+                this.setEstado(1);
+        }
 
-    }
+        public void recuperar () {
+                this.setEstado(0);
+        }
 
-
-
+        public boolean esEliminado () {
+                return this.getEstado() == 1;
+        }
 }

@@ -1,42 +1,38 @@
 package jsges.nails.domain.articulos;
 
 import jakarta.persistence.*;
-import jsges.nails.DTO.articulos.LineaDTO;
-import jsges.nails.domain.TipoObjeto;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 
 @Entity
+@Table(name = "linea")
 @Data
-@ToString
-public class Linea extends TipoObjeto {
+public class Linea {
 
-    //@Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    //private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id;
 
-    //@Column(columnDefinition = "TEXT")
-    //String denominacion;
-    //int estado;
+    @Column(columnDefinition = "TEXT", name = "denominacion")
+    private String denominacion;
 
-    //@Column(columnDefinition = "TEXT")
-    //String observacion;
+    @Column(name = "estado")
+    private Integer estado;
 
-    public Linea() {
-        // Constructor por defecto necesario para JPA
+    @Column(columnDefinition = "TEXT", name = "observacion")
+    private String observacion;
+
+    public void eliminar () {
+        this.setEstado(1);
     }
 
-    public Linea(String nombre) {
-
-        this.setDenominacion(nombre);
+    public void recuperar () {
+        this.setEstado(0);
     }
 
-    public Linea(LineaDTO model) {
-        this.setDenominacion(model.denominacion);
-
+    public boolean esEliminado () {
+        return this.getEstado() == 1;
     }
 }
 

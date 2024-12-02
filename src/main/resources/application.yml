@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/nails_back
+    username: postgres
+    password: 43928343
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  main:
+    banner-mode: off
+  web:
+    cors:
+      mappings:
+        "/nails/**":
+          allowed-origins: "*"
+          allowed-methods: "*"
+          allowed-headers: "*"
+
+# Configuración personalizada
+path_mapping: "/nails_back"
+path_cross: "*"
+max_page: 9
+
