@@ -17,7 +17,7 @@ public class ArticuloVenta {
         @Column(columnDefinition = "TEXT", name = "denominacion")
         private String denominacion;
 
-        @Column(columnDefinition = "TEXT", name = "estado")
+        @Column(name = "estado")
         private Integer estado;
 
         @Column(columnDefinition = "TEXT", name = "observacion")
