@@ -37,6 +37,7 @@ public class Cliente {
         @PrePersist
         protected void onCreate() {
                 this.fechaInicio = LocalDate.now();
+                this.estado = 0;
         }
 
         public void eliminar () {

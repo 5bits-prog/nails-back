@@ -30,6 +30,11 @@ public class ItemServicio {
     @Column(name = "precio")
     private Double precio;
 
+    @PrePersist
+    protected void onCreate() {
+        this.estado = 0;
+    }
+
     public void eliminar () {
         this.setEstado(1);
     }

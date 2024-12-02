@@ -22,6 +22,11 @@ public class TipoServicio {
     @Column(columnDefinition = "TEXT", name = "observacion")
     private String observacion;
 
+    @PrePersist
+    protected void onCreate() {
+        this.estado = 0;
+    }
+
     public void eliminar () {
         this.setEstado(1);
     }

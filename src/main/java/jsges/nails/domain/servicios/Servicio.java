@@ -33,6 +33,7 @@ public class Servicio {
 
         @PrePersist
         protected void onCreate() {
+                this.estado = 0;
                 this.fechaRegistro = LocalDateTime.now();
         }
 
