@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/nails_back
-    username: postgres
-    password: 43928343
+    url: jdbc:postgresql://dpg-ct6rc9d2ng1s73973hig-a.oregon-postgres.render.com/nails_back
+    username: root
+    password: XMzGUy6jF5Lge0Nwj3OjO6h9mkNyClWz
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
