@@ -94,9 +94,12 @@ public class ServicioController {
         newModel.setFechaRealizacion(model.fechaDocumento);
         newModel.setEstado(0);
 
+
+        double total = 0;
         Servicio servicioGuardado= modelService.guardar(newModel);
         for (ItemServicioDTO elemento : model.listaItems) {
             double precio = elemento.getPrecio();
+            total += precio;
             logger.info("entra for");
 
             TipoServicio tipoServicio = tipoServicioService.buscarPorId(elemento.getTipoServicioId());
@@ -110,6 +113,8 @@ public class ServicioController {
 
         }
 
+        newModel.setTotal(total);
+        modelService.guardar(newModel);
         return servicioGuardado;
     }
 }
