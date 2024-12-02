@@ -90,11 +90,9 @@ public class ServicioController {
 
         Servicio newModel =  new Servicio();
         newModel.setCliente(clienteService.buscarPorId(idCliente));
-        newModel.setFechaRegistro(model.fechaDocumento);
         newModel.setFechaRealizacion(model.fechaDocumento);
         newModel.setEstado(0);
-
-
+        
         double total = 0;
         Servicio servicioGuardado= modelService.guardar(newModel);
         for (ItemServicioDTO elemento : model.listaItems) {

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jsges.nails.domain.organizacion.Cliente;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "servicios")
@@ -26,7 +27,7 @@ public class Servicio {
         private LocalDateTime fechaRegistro;
 
         @Column(name = "fecha_realizacion")
-        private LocalDateTime fechaRealizacion;
+        private Date fechaRealizacion;
 
         @Column(name = "total")
         private double total;
