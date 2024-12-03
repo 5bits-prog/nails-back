@@ -103,7 +103,7 @@ public class ServicioController {
             TipoServicio tipoServicio = tipoServicioService.buscarPorId(elemento.getTipoServicioId());
             String observacion = elemento.getObservaciones();
             ItemServicio item = new ItemServicio();
-            item.setServicio(newModel);
+            item.setServicio(servicioGuardado);
             item.setTipoServicio(tipoServicio);
             item.setPrecio(precio);
             item.setObservacion(observacion);
