@@ -21,7 +21,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value="${path_mapping}")
 @CrossOrigin(value="${path_cross}")
-
 public class ClienteControlador {
     private static final Logger logger = LoggerFactory.getLogger(ClienteControlador.class);
     @Autowired
