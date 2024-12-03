@@ -110,9 +110,8 @@ public class ServicioController {
             itemServicioService.guardar(item);
 
         }
-
-        newModel.setTotal(total);
-        modelService.guardar(newModel);
+        servicioGuardado.setTotal(total);
+        servicioGuardado = modelService.guardar(servicioGuardado);
         return servicioGuardado;
     }
 }
